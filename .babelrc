@@ -1,0 +1,57 @@
+{
+  "plugins": [
+    "styled-components",
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": "css"
+      }
+    ]
+  ],
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": 7
+        },
+        "useBuiltIns": true,
+        "modules": false
+      }
+    ],
+    "react",
+    "stage-0"
+  ],
+  "env": {
+    "electron": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "node": 7
+            },
+            "useBuiltIns": true
+          }
+        ]
+      ]
+    },
+    "production": {
+      "only": [
+        "app"
+      ],
+      "plugins": [
+        "transform-react-remove-prop-types",
+        "transform-react-inline-elements",
+        "transform-react-constant-elements"
+      ]
+    },
+    "test": {
+      "plugins": [
+        "transform-es2015-modules-commonjs",
+        "dynamic-import-node"
+      ]
+    }
+  }
+}
