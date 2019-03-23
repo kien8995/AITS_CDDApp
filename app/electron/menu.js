@@ -183,10 +183,6 @@ export default class MenuBuilder {
         label: '&File',
         submenu: [
           {
-            label: '&Open',
-            accelerator: 'Ctrl+O',
-          },
-          {
             label: '&Close',
             accelerator: 'Ctrl+W',
             click: () => {
@@ -210,18 +206,6 @@ export default class MenuBuilder {
               // shell.openExternal(
               //   'https://github.com/atom/electron/tree/master/docs#readme',
               // );
-            },
-          },
-          {
-            label: 'Community Discussions',
-            click() {
-              // shell.openExternal('https://discuss.atom.io/c/electron');
-            },
-          },
-          {
-            label: 'Search Issues',
-            click() {
-              // shell.openExternal('https://github.com/atom/electron/issues');
             },
           },
         ],

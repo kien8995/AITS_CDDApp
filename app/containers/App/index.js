@@ -16,13 +16,13 @@ import NotFoundPage from 'containers/NotFoundPage';
 import GlobalStyle from '../../global-styles';
 
 const AppWrapper = styled.div`
-  background-color: #fafafa;
+  background-color: #fff;
   min-height: 100vh;
 `;
 
 const App = () => (
   <AppWrapper>
-    <Helmet titleTemplate="%s - AITS" defaultTitle="CDD App">
+    <Helmet titleTemplate="%s - Powered by AITS" defaultTitle="CDD App">
       <meta name="description" content="CDD App" />
     </Helmet>
     <GlobalStyle />
