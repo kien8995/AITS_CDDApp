@@ -4,10 +4,10 @@ import electron from 'electron';
 import electronSettings from 'electron-settings';
 import windowStateKeeper from 'electron-window-state';
 import isDev from 'electron-is-dev';
+import { sentryUtil } from '../utils';
 import MenuBuilder from './menu';
 import appUpdater from './autoupdater';
 import { setAutoLaunch } from './startup';
-import sentryUtil from '../utils/electronSentryUtil';
 
 // Variables and Constants
 let mainWindow;
@@ -18,8 +18,7 @@ const mainURL = `file://${indexPath}/index.html`;
 
 // Create application icon
 const APP_ICON = path.join(__dirname, '../resources', 'icon');
-const getIconPath = () =>
-  APP_ICON + (process.platform === 'win32' ? '.ico' : '.png');
+const getIconPath = () => APP_ICON + (process.platform === 'win32' ? '.ico' : '.png');
 
 // Install source map support in production mode
 if (process.env.NODE_ENV === 'production') {
@@ -46,18 +45,18 @@ const installExtensions = async () => {
 };
 
 // Create single instance of the application. Restore if minimized
-const isAlreadyRunning = app.makeSingleInstance(() => {
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) {
-      mainWindow.restore();
-    }
-    mainWindow.show();
-  }
-});
-
-// If already running, quit
-if (isAlreadyRunning) {
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
   app.quit();
+} else {
+  // eslint-disable-next-line no-unused-vars
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+  });
 }
 
 /**
@@ -156,7 +155,7 @@ app.commandLine.appendSwitch('force-color-profile', 'srgb');
 // eslint-disable-next-line max-params
 app.on(
   'certificate-error',
-  (event, webContents, url, error, certificate, callback) => {
+  (event, _webContents, _url, _error, _certificate, callback) => {
     event.preventDefault();
     callback(true);
   },
@@ -215,7 +214,7 @@ app.on('ready', async () => {
   });
 
   // Show pdf in a new BrowserWindow
-  ipcMain.on('pdf-view', (event, url) => {
+  ipcMain.on('pdf-view', (_event, url) => {
     // Paddings for pdfWindow so that it fits into the main browserWindow
     const paddingWidth = 55;
     const paddingHeight = 22;
@@ -263,12 +262,12 @@ app.on('ready', async () => {
   });
 
   // Forward message
-  ipcMain.on('forward-message', (event, listener, ...params) => {
+  ipcMain.on('forward-message', (_event, listener, ...params) => {
     page.send(listener, ...params);
   });
 
   // Toggle auto launcher
-  ipcMain.on('toggle-auto-launcher', (event, AutoLaunchValue) => {
+  ipcMain.on('toggle-auto-launcher', (_event, AutoLaunchValue) => {
     setAutoLaunch(AutoLaunchValue);
   });
 });

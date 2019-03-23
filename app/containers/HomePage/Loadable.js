@@ -1,11 +1,10 @@
-/**
- * Asynchronously loads the component for HomePage
- */
-import Loadable from 'react-loadable';
-
+import React, { lazy, Suspense } from 'react';
 import LoadingIndicator from 'components/LoadingIndicator';
 
-export default Loadable({
-  loader: () => import('./index'),
-  loading: LoadingIndicator,
-});
+const Component = lazy(() => import('./index'));
+
+export default props => (
+  <Suspense fallback={<LoadingIndicator />}>
+    <Component {...props} />
+  </Suspense>
+);

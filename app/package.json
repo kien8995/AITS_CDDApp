@@ -29,12 +29,12 @@
     "postinstall": "npm run electron-rebuild"
   },
   "dependencies": {
-    "@sentry/electron": "^0.9.0",
+    "@sentry/electron": "^0.17.0",
     "auto-launch": "^5.0.5",
-    "electron-is-dev": "^0.3.0",
-    "electron-log": "^2.2.17",
+    "electron-is-dev": "^1.0.1",
+    "electron-log": "^3.0.1",
     "electron-settings": "^3.2.0",
-    "electron-updater": "^3.1.2",
+    "electron-updater": "^4.0.6",
     "electron-window-state": "^5.0.1"
   }
 }

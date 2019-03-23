@@ -10,33 +10,29 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
-
+import ErrorBoundary from 'containers/ErrorBoundary';
 import HomePage from 'containers/HomePage/Loadable';
-import FeaturePage from 'containers/FeaturePage/Loadable';
-import SettingsPage from 'containers/SettingsPage/Loadable';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import NotFoundPage from 'containers/NotFoundPage';
+import GlobalStyle from '../../global-styles';
 
 const AppWrapper = styled.div`
-  /* max-width: calc(768px + 16px * 2);
-  margin: 0 auto;
-  display: flex;
-  min-height: 100%;
-  padding: 0 16px;
-  flex-direction: column; */
+  background-color: #fafafa;
+  min-height: 100vh;
 `;
 
-export default function App() {
-  return (
-    <AppWrapper>
-      <Helmet titleTemplate="%s - AITS" defaultTitle="CDD App">
-        <meta name="description" content="CDD App" />
-      </Helmet>
+const App = () => (
+  <AppWrapper>
+    <Helmet titleTemplate="%s - AITS" defaultTitle="CDD App">
+      <meta name="description" content="CDD App" />
+    </Helmet>
+    <GlobalStyle />
+    <ErrorBoundary>
       <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/features" component={FeaturePage} />
-        <Route path="/settings" component={SettingsPage} />
-        <Route path="" component={NotFoundPage} />
+        <Route path="/" component={HomePage} />
+        <Route component={NotFoundPage} />
       </Switch>
-    </AppWrapper>
-  );
-}
+    </ErrorBoundary>
+  </AppWrapper>
+);
+
+export default App;
