@@ -222,6 +222,7 @@
     "jwt-decode": "^2.2.0",
     "lodash": "4.17.11",
     "minimist": "1.2.0",
+    "mssql": "^5.0.3",
     "prop-types": "15.7.2",
     "react": "16.8.5",
     "react-dom": "npm:@hot-loader/react-dom",
