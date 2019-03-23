@@ -40,6 +40,7 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "prettier": "node ./internals/scripts/prettier.js",
     "prettify": "prettier --write",
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=production electron ./app/",
