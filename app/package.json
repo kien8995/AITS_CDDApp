@@ -1,28 +1,27 @@
 {
-  "name": "reactron",
-  "productName": "Reactron",
+  "name": "cddapp",
+  "productName": "cddapp",
   "version": "1.0.8",
-  "description": "Reactron Desktop App",
-  "license": "Apache-2.0",
-  "copyright": "Manish Jangir",
+  "description": "CDD Desktop App",
+  "license": "MIT",
+  "copyright": "Kien Tran",
   "author": {
-    "name": "Manish Jangir",
-    "email": "mjangir70@gmail.com"
+    "name": "Kien Tran",
+    "email": "trandongkien.sine@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mjangir/reactron.git"
+    "url": "https://github.com/kien8995/cddapp.git"
   },
   "bugs": {
-    "url": "https://github.com/mjangir/reactron/issues"
+    "url": "https://github.com/kien8995/cddapp/issues"
   },
   "main": "./electron/main.prod.js",
   "keywords": [
-    "Reactron",
-    "react with electron",
-    "electron",
-    "electron boilerplate",
-    "react electron"
+    "CDD App",
+    "AITS",
+    "React",
+    "Electron"
   ],
   "scripts": {
     "electron-rebuild": "cross-env BABEL_ENV=electron node -r babel-register ../internals/scripts/electron-rebuild.js",
@@ -35,6 +34,7 @@
     "electron-log": "^3.0.1",
     "electron-settings": "^3.2.0",
     "electron-updater": "^4.0.6",
-    "electron-window-state": "^5.0.1"
+    "electron-window-state": "^5.0.1",
+    "mssql": "^5.0.3"
   }
 }

@@ -9,10 +9,7 @@ export default class MenuBuilder {
   }
 
   buildMenu() {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.DEBUG_PROD === 'true'
-    ) {
+    if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
       this.setupDevelopmentEnvironment();
     }
 
@@ -148,27 +145,27 @@ export default class MenuBuilder {
         {
           label: 'Learn More',
           click() {
-            shell.openExternal('http://electron.atom.io');
+            shell.openExternal('https://www.google.com');
           },
         },
         {
           label: 'Documentation',
           click() {
-            shell.openExternal(
-              'https://github.com/atom/electron/tree/master/docs#readme',
-            );
+            // shell.openExternal(
+            //   'https://github.com/atom/electron/tree/master/docs#readme',
+            // );
           },
         },
         {
           label: 'Community Discussions',
           click() {
-            shell.openExternal('https://discuss.atom.io/c/electron');
+            // shell.openExternal('https://discuss.atom.io/c/electron');
           },
         },
         {
           label: 'Search Issues',
           click() {
-            shell.openExternal('https://github.com/atom/electron/issues');
+            // shell.openExternal('https://github.com/atom/electron/issues');
           },
         },
       ],
@@ -210,21 +207,21 @@ export default class MenuBuilder {
           {
             label: 'Documentation',
             click() {
-              shell.openExternal(
-                'https://github.com/atom/electron/tree/master/docs#readme',
-              );
+              // shell.openExternal(
+              //   'https://github.com/atom/electron/tree/master/docs#readme',
+              // );
             },
           },
           {
             label: 'Community Discussions',
             click() {
-              shell.openExternal('https://discuss.atom.io/c/electron');
+              // shell.openExternal('https://discuss.atom.io/c/electron');
             },
           },
           {
             label: 'Search Issues',
             click() {
-              shell.openExternal('https://github.com/atom/electron/issues');
+              // shell.openExternal('https://github.com/atom/electron/issues');
             },
           },
         ],

@@ -77,7 +77,7 @@ function createMainWindow() {
 
   const win = new electron.BrowserWindow({
     // This settings needs to be saved in config
-    title: 'Reactron',
+    title: 'CDD App',
     icon: getIconPath(),
     x: mainWindowState.x,
     y: mainWindowState.y,
@@ -115,12 +115,12 @@ function createMainWindow() {
       if (process.platform === 'darwin') {
         app.hide();
       } else {
-        win.hide();
+        win.destroy();
       }
     }
   });
 
-  win.setTitle('Reactron');
+  win.setTitle('CDD App');
 
   win.on('enter-full-screen', () => {
     win.webContents.send('enter-fullscreen');
