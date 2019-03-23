@@ -309,6 +309,7 @@
     "postcss-preset-env": "^6.6.0",
     "postcss-smart-import": "^0.7.6",
     "pre-commit": "1.2.2",
+    "precss": "^4.0.0",
     "prettier": "1.16.4",
     "react-test-renderer": "16.8.5",
     "rimraf": "2.6.3",
