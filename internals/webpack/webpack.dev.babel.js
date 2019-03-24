@@ -77,6 +77,7 @@ module.exports = require('./webpack.base.babel')({
   devServer: {
     port: 3000,
     publicPath: `http://localhost:3000/`,
+    disableHostCheck: true,
     compress: true,
     noInfo: false,
     stats: 'errors-only',
@@ -150,9 +151,7 @@ function dependencyHandlers() {
 
     if (!fs.existsSync(manifestPath)) {
       console.error(
-        chalk.red(
-          'The DLL manifest is missing. Please run `npm run build:dll`',
-        ),
+        chalk.red('The DLL manifest is missing. Please run `npm run build:dll`'),
       );
       process.exit(0);
     }
