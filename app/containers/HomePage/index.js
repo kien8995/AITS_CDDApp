@@ -17,6 +17,16 @@ const ListHeader = styled.div`
   font-size: 14pt;
 `;
 
+const ListItem = styled(List.Item)`
+  cursor: pointer;
+  transition: color 0.3s ease;
+  -webkit-transition: color 0.3s ease;
+  &:hover {
+    background-color: #40a9ff;
+    color: #fff;
+  }
+`;
+
 const ControlHeader = styled.div`
   font-weight: bold;
   font-size: 14pt;
@@ -41,7 +51,7 @@ const ControlWrapper = styled(Col)`
 
 const ButtonWrapper = styled(Col)`
   text-align: center;
-  margin-top: 50px;
+  margin-top: 30px;
 `;
 
 const ImportButton = styled(Button)`
@@ -86,14 +96,14 @@ const HomePage = () => {
           <ListWrapper span={12}>
             <List
               size="large"
-              header={<ListHeader>Danh sách các file CDD</ListHeader>}
+              header={<ListHeader>List of CDD files</ListHeader>}
               bordered
               dataSource={data}
-              renderItem={item => <List.Item>{item}</List.Item>}
+              renderItem={item => <ListItem>{item}</ListItem>}
             />
           </ListWrapper>
           <ControlWrapper span={10}>
-            <ControlHeader>Chọn folder</ControlHeader>
+            <ControlHeader>Select folder</ControlHeader>
             <Search
               value={directory}
               enterButton="Browse"
@@ -101,12 +111,11 @@ const HomePage = () => {
               onSearch={handleBrowseClick}
             />
 
-            <ControlHeader>Chọn ngày</ControlHeader>
+            <ControlHeader>Select date range</ControlHeader>
             <StyledRangePicker
               defaultValue={[moment(today, dateFormat), moment(today, dateFormat)]}
               format={dateFormat}
             />
-            <br />
             <Row>
               <ButtonWrapper span={24}>
                 <ImportButton type="primary" icon="download" onClick={callSql} loading>
