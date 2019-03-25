@@ -220,6 +220,7 @@
     "compression": "1.7.4",
     "cross-env": "5.2.0",
     "electron-debug": "^2.0.0",
+    "fast-glob": "^2.2.6",
     "fontfaceobserver": "2.1.0",
     "history": "4.9.0",
     "intl": "1.2.5",
