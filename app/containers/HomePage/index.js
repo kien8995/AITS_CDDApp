@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { DatePicker, Button, Row, Col, List, Input, message } from 'antd';
 import styled from 'styled-components';
 import moment from 'moment';
 import sql from 'mssql';
 import { remote } from 'electron';
-import fs, { createReadStream } from 'fs';
-import { createInterface } from 'readline';
 import path from 'path';
+import fg from 'fast-glob';
+import { actionLoading, actionError, loadFile, importData } from './actions';
+import cddReducer, { initialState } from './reducer';
+import { readRes } from './readCDDFile';
 
 const { dialog } = remote;
 
@@ -67,42 +69,21 @@ const currentTime = new Date();
 const today = `${currentTime.getFullYear()}/${currentTime.getMonth() +
   1}/${currentTime.getDate()}`;
 
+const defaultDateRange = [moment(today, dateFormat), moment(today, dateFormat)];
+
 const filePattern = /^(.*)+_(\d{8}).(txt)$/;
 
 const HomePage = () => {
+  const [state, dispatch] = useReducer(cddReducer, initialState);
+  const { loading, data } = state;
   const [directory, setDirectory] = useState('');
-  const [listFile, setListFile] = useState([]);
+  const [dateRange, setDateRange] = useState(defaultDateRange);
 
   useEffect(() => {
     if (directory !== '') {
-      fs.readdir(directory, (error, files) => {
-        const arr = [];
-        if (error) {
-          message.error(error);
-        }
-        files.forEach(file => {
-          const match = file.match(filePattern);
-          if (
-            filePattern.test(file) &&
-            match.length > 0 &&
-            moment(
-              `${match[2].slice(0, 4)}-${match[2].slice(4, 6)}-${match[2].slice(6)}`,
-            ).isValid()
-          ) {
-            // const lineReader = createInterface({
-            //   input: createReadStream(path.join(directory, file)),
-            // });
-            // lineReader.on('line', line => {
-            //   console.log(line);
-            // });
-            arr.push(match[1]);
-            // console.log(arr);
-          }
-        });
-        setListFile(arr);
-      });
+      getCDDFiles();
     }
-  }, [directory]);
+  }, [directory, dateRange]);
 
   const callSql = async () => {
     try {
@@ -116,11 +97,71 @@ const HomePage = () => {
     }
   };
 
+  const getCDDFiles = async () => {
+    dispatch(actionLoading());
+    try {
+      const files = await fg([`${directory}/*.txt`], { deep: 0 });
+      const arr = [];
+      files.forEach(fileDir => {
+        const file = path.basename(fileDir);
+        const match = file.match(filePattern);
+        if (filePattern.test(file) && match.length > 0) {
+          const fileDate = `${match[2].slice(0, 4)}-${match[2].slice(
+            4,
+            6,
+          )}-${match[2].slice(6)}`;
+          if (
+            moment(fileDate).isValid() &&
+            (moment(fileDate).isBetween(dateRange[0], dateRange[1]) ||
+              moment(fileDate).isSame(dateRange[0]))
+          ) {
+            arr.push({
+              name: match[1],
+              file,
+              fileDate,
+            });
+          }
+        }
+      });
+      dispatch(loadFile(arr));
+    } catch (error) {
+      dispatch(actionError(error));
+      message.error(error);
+    }
+  };
+
+  const importCDDFiles = async () => {
+    if (data.length === 0) return;
+    dispatch(actionLoading());
+    try {
+      await sql.connect('mssql://sa:k6sa@10.125.0.6/CDDData');
+      data.forEach(item => {
+        switch (item.name) {
+          case 'Res':
+            readRes(directory, item.file);
+            break;
+          default:
+        }
+      });
+      dispatch(importData());
+      message.success('Completed!');
+    } catch (error) {
+      dispatch(actionError(error));
+      message.error(error);
+    } finally {
+      sql.close();
+    }
+  };
+
   const handleBrowseClick = () => {
     const dirs = dialog.showOpenDialog({ properties: ['openDirectory'] });
     if (dirs) {
       setDirectory(dirs[0]);
     }
+  };
+
+  const handleDateRangeChange = dates => {
+    setDateRange(dates);
   };
 
   return (
@@ -131,9 +172,9 @@ const HomePage = () => {
             size="large"
             header={<ListHeader>List of CDD files</ListHeader>}
             bordered
-            loading={listFile.length === 0}
-            dataSource={listFile}
-            renderItem={item => <ListItem>{item}</ListItem>}
+            loading={loading}
+            dataSource={data}
+            renderItem={item => <ListItem>{item.file}</ListItem>}
           />
         </ListWrapper>
         <ControlWrapper span={10}>
@@ -147,12 +188,18 @@ const HomePage = () => {
 
           <ControlHeader>Select date range</ControlHeader>
           <StyledRangePicker
-            defaultValue={[moment(today, dateFormat), moment(today, dateFormat)]}
+            defaultValue={defaultDateRange}
             format={dateFormat}
+            onChange={handleDateRangeChange}
           />
           <Row>
             <ButtonWrapper span={24}>
-              <ImportButton type="primary" icon="download" onClick={callSql} loading>
+              <ImportButton
+                type="primary"
+                icon="download"
+                onClick={importCDDFiles}
+                loading={loading}
+              >
                 Import Data
               </ImportButton>
             </ButtonWrapper>
