@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { DatePicker, Button, Row, Col, List, Input } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { DatePicker, Button, Row, Col, List, Input, message } from 'antd';
 import styled from 'styled-components';
 import moment from 'moment';
 import sql from 'mssql';
 import { remote } from 'electron';
+import fs, { createReadStream } from 'fs';
+import { createInterface } from 'readline';
+import path from 'path';
 
 const { dialog } = remote;
 
@@ -60,15 +62,48 @@ const ImportButton = styled(Button)`
 
 const dateFormat = 'YYYY/MM/DD';
 
-const data = ['tbRes', 'tblataCode'];
-
 const currentTime = new Date();
 
 const today = `${currentTime.getFullYear()}/${currentTime.getMonth() +
   1}/${currentTime.getDate()}`;
 
+const filePattern = /^(.*)+_(\d{8}).(txt)$/;
+
 const HomePage = () => {
   const [directory, setDirectory] = useState('');
+  const [listFile, setListFile] = useState([]);
+
+  useEffect(() => {
+    if (directory !== '') {
+      fs.readdir(directory, (error, files) => {
+        const arr = [];
+        if (error) {
+          message.error(error);
+        }
+        files.forEach(file => {
+          const match = file.match(filePattern);
+          if (
+            filePattern.test(file) &&
+            match.length > 0 &&
+            moment(
+              `${match[2].slice(0, 4)}-${match[2].slice(4, 6)}-${match[2].slice(6)}`,
+            ).isValid()
+          ) {
+            // const lineReader = createInterface({
+            //   input: createReadStream(path.join(directory, file)),
+            // });
+            // lineReader.on('line', line => {
+            //   console.log(line);
+            // });
+            arr.push(match[1]);
+            // console.log(arr);
+          }
+        });
+        setListFile(arr);
+      });
+    }
+  }, [directory]);
+
   const callSql = async () => {
     try {
       await sql.connect('mssql://sa:k6sa@10.125.0.6/CDDData');
@@ -82,50 +117,48 @@ const HomePage = () => {
   };
 
   const handleBrowseClick = () => {
-    setDirectory(dialog.showOpenDialog({ properties: ['openDirectory'] }));
+    const dirs = dialog.showOpenDialog({ properties: ['openDirectory'] });
+    if (dirs) {
+      setDirectory(dirs[0]);
+    }
   };
 
   return (
     <div>
-      <Helmet>
-        <title>CDD App v1.0</title>
-        <meta name="description" content="CDD App" />
-      </Helmet>
-      <div>
-        <Row>
-          <ListWrapper span={12}>
-            <List
-              size="large"
-              header={<ListHeader>List of CDD files</ListHeader>}
-              bordered
-              dataSource={data}
-              renderItem={item => <ListItem>{item}</ListItem>}
-            />
-          </ListWrapper>
-          <ControlWrapper span={10}>
-            <ControlHeader>Select folder</ControlHeader>
-            <Search
-              value={directory}
-              enterButton="Browse"
-              readOnly
-              onSearch={handleBrowseClick}
-            />
+      <Row>
+        <ListWrapper span={12}>
+          <List
+            size="large"
+            header={<ListHeader>List of CDD files</ListHeader>}
+            bordered
+            loading={listFile.length === 0}
+            dataSource={listFile}
+            renderItem={item => <ListItem>{item}</ListItem>}
+          />
+        </ListWrapper>
+        <ControlWrapper span={10}>
+          <ControlHeader>Select folder</ControlHeader>
+          <Search
+            value={directory}
+            enterButton="Browse"
+            readOnly
+            onSearch={() => handleBrowseClick()}
+          />
 
-            <ControlHeader>Select date range</ControlHeader>
-            <StyledRangePicker
-              defaultValue={[moment(today, dateFormat), moment(today, dateFormat)]}
-              format={dateFormat}
-            />
-            <Row>
-              <ButtonWrapper span={24}>
-                <ImportButton type="primary" icon="download" onClick={callSql} loading>
-                  Import Data
-                </ImportButton>
-              </ButtonWrapper>
-            </Row>
-          </ControlWrapper>
-        </Row>
-      </div>
+          <ControlHeader>Select date range</ControlHeader>
+          <StyledRangePicker
+            defaultValue={[moment(today, dateFormat), moment(today, dateFormat)]}
+            format={dateFormat}
+          />
+          <Row>
+            <ButtonWrapper span={24}>
+              <ImportButton type="primary" icon="download" onClick={callSql} loading>
+                Import Data
+              </ImportButton>
+            </ButtonWrapper>
+          </Row>
+        </ControlWrapper>
+      </Row>
     </div>
   );
 };
