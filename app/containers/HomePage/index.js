@@ -8,7 +8,36 @@ import path from 'path';
 import fg from 'fast-glob';
 import { actionLoading, actionError, loadFile, importData } from './actions';
 import cddReducer, { initialState } from './reducer';
-import { readRes } from './readCDDFile';
+import {
+  importRes,
+  importResFlight,
+  importResFlightFT,
+  importResRemark,
+  importResPreReservedSeat,
+  importResPassengerDoc,
+  importResSuspenseDocArrangement,
+  importResSuspenseTimeLimit,
+  importResEmergencyContact,
+  importResPassenger,
+  importResSSR,
+  importResTravelArranger,
+  importResPassengerEmail,
+  importResPassengerPhone,
+  importResODFlight,
+  importResAddress,
+  importTktDocument,
+  importTktCoupon,
+  importTktTax,
+  importTktTaxDetail,
+  importTktPayment,
+  importTktRemark,
+  importTktAddress,
+  importTktDocumentHistory,
+  importTktCouponHistory,
+  importTktEndorsement,
+  importResDataIndex,
+  importTktProration,
+} from './importCDD';
 
 const { dialog } = remote;
 
@@ -113,7 +142,8 @@ const HomePage = () => {
           if (
             moment(fileDate).isValid() &&
             (moment(fileDate).isBetween(dateRange[0], dateRange[1]) ||
-              moment(fileDate).isSame(dateRange[0]))
+              moment(fileDate).isSame(dateRange[0]) ||
+              moment(fileDate).isSame(dateRange[1]))
           ) {
             arr.push({
               name: match[1],
@@ -123,6 +153,15 @@ const HomePage = () => {
           }
         }
       });
+      arr.sort((a, b) => {
+        if (moment(a.fileDate).isBefore(b.fileDate)) {
+          return -1;
+        }
+        if (moment(b.fileDate).isBefore(a.fileDate)) {
+          return 1;
+        }
+        return 0;
+      });
       dispatch(loadFile(arr));
     } catch (error) {
       dispatch(actionError(error));
@@ -130,26 +169,127 @@ const HomePage = () => {
     }
   };
 
+  const importCDDFile = async (_tbName, _directory, _file, _fileDate) => {
+    let importResult = false;
+    switch (_tbName) {
+      case 'Res':
+        importResult = await importRes(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResFlight':
+        importResult = await importResFlight(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResFlightFT':
+        importResult = await importResFlightFT(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResRemarks':
+        importResult = await importResRemark(_directory, _file, _fileDate);
+        return importResult;
+      case 'PreResSeat':
+        importResult = await importResPreReservedSeat(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResPaxDoc':
+        importResult = await importResPassengerDoc(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResSuspDocAgmt':
+        importResult = await importResSuspenseDocArrangement(
+          _directory,
+          _file,
+          _fileDate,
+        );
+        return importResult;
+      case 'ResSuspTimeLmt':
+        importResult = await importResSuspenseTimeLimit(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResEmergencyCtc':
+        importResult = await importResEmergencyContact(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResPassenger':
+        importResult = await importResPassenger(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResSSR':
+        importResult = await importResSSR(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResTravelArranger':
+        importResult = await importResTravelArranger(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResPassengerEmail':
+        importResult = await importResPassengerEmail(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResPassengerPhone':
+        importResult = await importResPassengerPhone(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResODFlight':
+        importResult = await importResODFlight(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResAddress':
+        importResult = await importResAddress(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktDocument':
+        importResult = await importTktDocument(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktCoupon':
+        importResult = await importTktCoupon(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktTax':
+        importResult = await importTktTax(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktTaxDetail':
+        importResult = await importTktTaxDetail(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktPayment':
+        importResult = await importTktPayment(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktRemark':
+        importResult = await importTktRemark(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktAddress':
+        importResult = await importTktAddress(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktDocumentHistory':
+        importResult = await importTktDocumentHistory(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktCouponHistory':
+        importResult = await importTktCouponHistory(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktEndorsement':
+        importResult = await importTktEndorsement(_directory, _file, _fileDate);
+        return importResult;
+      case 'ResDataIndex':
+        importResult = await importResDataIndex(_directory, _file, _fileDate);
+        return importResult;
+      case 'TktProRation':
+        importResult = await importTktProration(_directory, _file, _fileDate);
+        return importResult;
+      default:
+        return importResult;
+    }
+  };
+
   const importCDDFiles = async () => {
     if (data.length === 0) return;
     dispatch(actionLoading());
     try {
-      await sql.connect('mssql://sa:k6sa@10.125.0.6/CDDData');
-      data.forEach(item => {
-        switch (item.name) {
-          case 'Res':
-            readRes(directory, item.file);
-            break;
-          default:
+      let importResult = true;
+      for (let index = 0; index < data.length; index += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        importResult = await importCDDFile(
+          data[index].name,
+          directory,
+          data[index].file,
+          data[index].fileDate,
+        );
+
+        if (!importResult) {
+          // move file to error folder
+        } else {
+          // move file to processed folder
         }
-      });
+      }
       dispatch(importData());
       message.success('Completed!');
     } catch (error) {
       dispatch(actionError(error));
       message.error(error);
-    } finally {
-      sql.close();
     }
   };
 
@@ -183,7 +323,7 @@ const HomePage = () => {
             value={directory}
             enterButton="Browse"
             readOnly
-            onSearch={() => handleBrowseClick()}
+            onSearch={handleBrowseClick}
           />
 
           <ControlHeader>Select date range</ControlHeader>

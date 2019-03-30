@@ -9,12 +9,11 @@ export const initialState = {
 const cddReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOADING:
-      return Object.assign({}, state, { loading: true, error: false, data: [] });
+      return Object.assign({}, state, { loading: true, error: false });
     case ERROR:
       return Object.assign({}, state, {
         loading: false,
         error: action.error,
-        data: [],
       });
     case LOAD_FILE:
       return Object.assign({}, state, {
