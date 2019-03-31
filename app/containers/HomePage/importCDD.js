@@ -1,8 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable new-cap */
-import path from 'path';
 import { createInterface } from 'readline';
-import { createReadStream } from 'fs';
+import fs, { createReadStream } from 'fs';
 import sql from 'mssql';
 import moment from 'moment';
 import dbConfig from 'config/db.config';
@@ -38,9 +37,19 @@ import tbTktProration from './entities/tbTktProration';
 const formatDate = 'YYYY-MM-DD';
 const formatDateTime = 'YYYY-MM-DD HH:mm:ss';
 
-export const importRes = async (directory, file, fileDate) => {
+const getFilesizeInBytes = filePath => {
+  const stats = fs.statSync(filePath);
+  const fileSizeInBytes = stats.size;
+  return fileSizeInBytes;
+};
+
+export const importRes = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -219,9 +228,13 @@ export const importRes = async (directory, file, fileDate) => {
   }
 };
 
-export const importResFlight = async (directory, file, fileDate) => {
+export const importResFlight = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -477,9 +490,13 @@ export const importResFlight = async (directory, file, fileDate) => {
   }
 };
 
-export const importResFlightFT = async (directory, file, fileDate) => {
+export const importResFlightFT = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -618,9 +635,13 @@ export const importResFlightFT = async (directory, file, fileDate) => {
   }
 };
 
-export const importResRemark = async (directory, file, fileDate) => {
+export const importResRemark = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -723,9 +744,13 @@ export const importResRemark = async (directory, file, fileDate) => {
   }
 };
 
-export const importResPreReservedSeat = async (directory, file, fileDate) => {
+export const importResPreReservedSeat = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -875,9 +900,13 @@ export const importResPreReservedSeat = async (directory, file, fileDate) => {
   }
 };
 
-export const importResPassengerDoc = async (directory, file, fileDate) => {
+export const importResPassengerDoc = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -1043,9 +1072,13 @@ export const importResPassengerDoc = async (directory, file, fileDate) => {
   }
 };
 
-export const importResSuspenseDocArrangement = async (directory, file, fileDate) => {
+export const importResSuspenseDocArrangement = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -1223,9 +1256,13 @@ export const importResSuspenseDocArrangement = async (directory, file, fileDate)
   }
 };
 
-export const importResSuspenseTimeLimit = async (directory, file, fileDate) => {
+export const importResSuspenseTimeLimit = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -1342,9 +1379,13 @@ export const importResSuspenseTimeLimit = async (directory, file, fileDate) => {
   }
 };
 
-export const importResEmergencyContact = async (directory, file, fileDate) => {
+export const importResEmergencyContact = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -1471,9 +1512,13 @@ export const importResEmergencyContact = async (directory, file, fileDate) => {
   }
 };
 
-export const importResPassenger = async (directory, file, fileDate) => {
+export const importResPassenger = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -1582,9 +1627,13 @@ export const importResPassenger = async (directory, file, fileDate) => {
   }
 };
 
-export const importResSSR = async (directory, file, fileDate) => {
+export const importResSSR = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -1721,9 +1770,13 @@ export const importResSSR = async (directory, file, fileDate) => {
   }
 };
 
-export const importResTravelArranger = async (directory, file, fileDate) => {
+export const importResTravelArranger = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -1850,9 +1903,13 @@ export const importResTravelArranger = async (directory, file, fileDate) => {
   }
 };
 
-export const importResPassengerEmail = async (directory, file, fileDate) => {
+export const importResPassengerEmail = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -1955,9 +2012,13 @@ export const importResPassengerEmail = async (directory, file, fileDate) => {
   }
 };
 
-export const importResPassengerPhone = async (directory, file, fileDate) => {
+export const importResPassengerPhone = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -2063,9 +2124,13 @@ export const importResPassengerPhone = async (directory, file, fileDate) => {
   }
 };
 
-export const importResODFlight = async (directory, file, fileDate) => {
+export const importResODFlight = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -2166,9 +2231,13 @@ export const importResODFlight = async (directory, file, fileDate) => {
   }
 };
 
-export const importResAddress = async (directory, file, fileDate) => {
+export const importResAddress = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -2301,9 +2370,13 @@ export const importResAddress = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktDocument = async (directory, file, fileDate) => {
+export const importTktDocument = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -2636,9 +2709,13 @@ export const importTktDocument = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktCoupon = async (directory, file, fileDate) => {
+export const importTktCoupon = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -2859,9 +2936,13 @@ export const importTktCoupon = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktTax = async (directory, file, fileDate) => {
+export const importTktTax = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -2960,9 +3041,13 @@ export const importTktTax = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktTaxDetail = async (directory, file, fileDate) => {
+export const importTktTaxDetail = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -3058,9 +3143,13 @@ export const importTktTaxDetail = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktPayment = async (directory, file, fileDate) => {
+export const importTktPayment = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -3168,9 +3257,13 @@ export const importTktPayment = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktRemark = async (directory, file, fileDate) => {
+export const importTktRemark = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -3257,9 +3350,13 @@ export const importTktRemark = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktAddress = async (directory, file, fileDate) => {
+export const importTktAddress = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -3346,9 +3443,13 @@ export const importTktAddress = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktDocumentHistory = async (directory, file, fileDate) => {
+export const importTktDocumentHistory = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -3509,9 +3610,13 @@ export const importTktDocumentHistory = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktCouponHistory = async (directory, file, fileDate) => {
+export const importTktCouponHistory = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -3675,9 +3780,13 @@ export const importTktCouponHistory = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktEndorsement = async (directory, file, fileDate) => {
+export const importTktEndorsement = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -3764,9 +3873,13 @@ export const importTktEndorsement = async (directory, file, fileDate) => {
   }
 };
 
-export const importResDataIndex = async (directory, file, fileDate) => {
+export const importResDataIndex = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];
@@ -3875,9 +3988,13 @@ export const importResDataIndex = async (directory, file, fileDate) => {
   }
 };
 
-export const importTktProration = async (directory, file, fileDate) => {
+export const importTktProration = async (filePath, fileDate) => {
+  if (getFilesizeInBytes(filePath) === 0) {
+    return true;
+  }
+
   const lineReader = createInterface({
-    input: createReadStream(path.join(directory, file)),
+    input: createReadStream(filePath),
   });
 
   const values = [];

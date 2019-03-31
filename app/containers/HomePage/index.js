@@ -2,8 +2,8 @@ import React, { useState, useEffect, useReducer } from 'react';
 import { DatePicker, Button, Row, Col, List, Input, message } from 'antd';
 import styled from 'styled-components';
 import moment from 'moment';
-import sql from 'mssql';
 import { remote } from 'electron';
+import fse from 'fs-extra';
 import path from 'path';
 import fg from 'fast-glob';
 import { actionLoading, actionError, loadFile, importData } from './actions';
@@ -102,6 +102,15 @@ const defaultDateRange = [moment(today, dateFormat), moment(today, dateFormat)];
 
 const filePattern = /^(.*)+_(\d{8}).(txt)$/;
 
+const moveFile = async (src, dest) => {
+  try {
+    await fse.move(src, dest);
+    // console.log('success!');
+  } catch (err) {
+    // console.error(err);
+  }
+};
+
 const HomePage = () => {
   const [state, dispatch] = useReducer(cddReducer, initialState);
   const { loading, data } = state;
@@ -113,18 +122,6 @@ const HomePage = () => {
       getCDDFiles();
     }
   }, [directory, dateRange]);
-
-  const callSql = async () => {
-    try {
-      await sql.connect('mssql://sa:k6sa@10.125.0.6/CDDData');
-      const result = await sql.query`select top 10 * from tbRes`;
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      sql.close();
-    }
-  };
 
   const getCDDFiles = async () => {
     dispatch(actionLoading());
@@ -169,96 +166,92 @@ const HomePage = () => {
     }
   };
 
-  const importCDDFile = async (_tbName, _directory, _file, _fileDate) => {
+  const importCDDFile = async (_tbName, _filePath, _fileDate) => {
     let importResult = false;
     switch (_tbName) {
       case 'Res':
-        importResult = await importRes(_directory, _file, _fileDate);
+        importResult = await importRes(_filePath, _fileDate);
         return importResult;
       case 'ResFlight':
-        importResult = await importResFlight(_directory, _file, _fileDate);
+        importResult = await importResFlight(_filePath, _fileDate);
         return importResult;
       case 'ResFlightFT':
-        importResult = await importResFlightFT(_directory, _file, _fileDate);
+        importResult = await importResFlightFT(_filePath, _fileDate);
         return importResult;
       case 'ResRemarks':
-        importResult = await importResRemark(_directory, _file, _fileDate);
+        importResult = await importResRemark(_filePath, _fileDate);
         return importResult;
       case 'PreResSeat':
-        importResult = await importResPreReservedSeat(_directory, _file, _fileDate);
+        importResult = await importResPreReservedSeat(_filePath, _fileDate);
         return importResult;
       case 'ResPaxDoc':
-        importResult = await importResPassengerDoc(_directory, _file, _fileDate);
+        importResult = await importResPassengerDoc(_filePath, _fileDate);
         return importResult;
       case 'ResSuspDocAgmt':
-        importResult = await importResSuspenseDocArrangement(
-          _directory,
-          _file,
-          _fileDate,
-        );
+        importResult = await importResSuspenseDocArrangement(_filePath, _fileDate);
         return importResult;
       case 'ResSuspTimeLmt':
-        importResult = await importResSuspenseTimeLimit(_directory, _file, _fileDate);
+        importResult = await importResSuspenseTimeLimit(_filePath, _fileDate);
         return importResult;
       case 'ResEmergencyCtc':
-        importResult = await importResEmergencyContact(_directory, _file, _fileDate);
+        importResult = await importResEmergencyContact(_filePath, _fileDate);
         return importResult;
       case 'ResPassenger':
-        importResult = await importResPassenger(_directory, _file, _fileDate);
+        importResult = await importResPassenger(_filePath, _fileDate);
         return importResult;
       case 'ResSSR':
-        importResult = await importResSSR(_directory, _file, _fileDate);
+        importResult = await importResSSR(_filePath, _fileDate);
         return importResult;
       case 'ResTravelArranger':
-        importResult = await importResTravelArranger(_directory, _file, _fileDate);
+        importResult = await importResTravelArranger(_filePath, _fileDate);
         return importResult;
       case 'ResPassengerEmail':
-        importResult = await importResPassengerEmail(_directory, _file, _fileDate);
+        importResult = await importResPassengerEmail(_filePath, _fileDate);
         return importResult;
       case 'ResPassengerPhone':
-        importResult = await importResPassengerPhone(_directory, _file, _fileDate);
+        importResult = await importResPassengerPhone(_filePath, _fileDate);
         return importResult;
       case 'ResODFlight':
-        importResult = await importResODFlight(_directory, _file, _fileDate);
+        importResult = await importResODFlight(_filePath, _fileDate);
         return importResult;
       case 'ResAddress':
-        importResult = await importResAddress(_directory, _file, _fileDate);
+        importResult = await importResAddress(_filePath, _fileDate);
         return importResult;
       case 'TktDocument':
-        importResult = await importTktDocument(_directory, _file, _fileDate);
+        importResult = await importTktDocument(_filePath, _fileDate);
         return importResult;
       case 'TktCoupon':
-        importResult = await importTktCoupon(_directory, _file, _fileDate);
+        importResult = await importTktCoupon(_filePath, _fileDate);
         return importResult;
       case 'TktTax':
-        importResult = await importTktTax(_directory, _file, _fileDate);
+        importResult = await importTktTax(_filePath, _fileDate);
         return importResult;
       case 'TktTaxDetail':
-        importResult = await importTktTaxDetail(_directory, _file, _fileDate);
+        importResult = await importTktTaxDetail(_filePath, _fileDate);
         return importResult;
       case 'TktPayment':
-        importResult = await importTktPayment(_directory, _file, _fileDate);
+        importResult = await importTktPayment(_filePath, _fileDate);
         return importResult;
       case 'TktRemark':
-        importResult = await importTktRemark(_directory, _file, _fileDate);
+        importResult = await importTktRemark(_filePath, _fileDate);
         return importResult;
       case 'TktAddress':
-        importResult = await importTktAddress(_directory, _file, _fileDate);
+        importResult = await importTktAddress(_filePath, _fileDate);
         return importResult;
       case 'TktDocumentHistory':
-        importResult = await importTktDocumentHistory(_directory, _file, _fileDate);
+        importResult = await importTktDocumentHistory(_filePath, _fileDate);
         return importResult;
       case 'TktCouponHistory':
-        importResult = await importTktCouponHistory(_directory, _file, _fileDate);
+        importResult = await importTktCouponHistory(_filePath, _fileDate);
         return importResult;
       case 'TktEndorsement':
-        importResult = await importTktEndorsement(_directory, _file, _fileDate);
+        importResult = await importTktEndorsement(_filePath, _fileDate);
         return importResult;
       case 'ResDataIndex':
-        importResult = await importResDataIndex(_directory, _file, _fileDate);
+        importResult = await importResDataIndex(_filePath, _fileDate);
         return importResult;
       case 'TktProRation':
-        importResult = await importTktProration(_directory, _file, _fileDate);
+        importResult = await importTktProration(_filePath, _fileDate);
         return importResult;
       default:
         return importResult;
@@ -274,15 +267,20 @@ const HomePage = () => {
         // eslint-disable-next-line no-await-in-loop
         importResult = await importCDDFile(
           data[index].name,
-          directory,
-          data[index].file,
+          path.join(directory, data[index].file),
           data[index].fileDate,
         );
 
         if (!importResult) {
-          // move file to error folder
+          moveFile(
+            path.join(directory, data[index].file),
+            path.join(directory, 'Error', data[index].file),
+          );
         } else {
-          // move file to processed folder
+          moveFile(
+            path.join(directory, data[index].file),
+            path.join(directory, 'Processed', data[index].file),
+          );
         }
       }
       dispatch(importData());
