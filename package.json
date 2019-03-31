@@ -62,7 +62,7 @@
     "package-win": "npm run release:clean && npm run build && build --win --x64"
   },
   "build": {
-    "appId": "com.vietnamairlines.aits.cdd",
+    "appId": "com.vietnamairlines.aits.cddapp",
     "asar": true,
     "files": [
       "build/",
@@ -98,8 +98,8 @@
       "synopsis": "CDD Desktop App"
     },
     "dmg": {
-      "background": "build/appdmg.png",
-      "icon": "build/icon.icns",
+      "background": "./resources/appdmg.png",
+      "icon": "./resources/icon.icns",
       "iconSize": 100,
       "contents": [
         {
@@ -211,9 +211,6 @@
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ]
-  },
-  "alias": {
-    "react-dom": "@hot-loader/react-dom"
   },
   "dependencies": {
     "antd": "^3.15.1",
@@ -330,7 +327,7 @@
     "stylelint-config-styled-components": "0.1.1",
     "stylelint-processor-styled-components": "1.6.0",
     "svg-url-loader": "2.3.2",
-    "uglifyjs-webpack-plugin": "^2.1.2",
+    "terser-webpack-plugin": "^1.2.3",
     "url-loader": "1.1.2",
     "webpack": "4.29.6",
     "webpack-bundle-analyzer": "^3.1.0",

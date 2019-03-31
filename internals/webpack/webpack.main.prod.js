@@ -1,6 +1,6 @@
 import path from 'path';
 import webpack from 'webpack';
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.base.babel';
 
@@ -20,7 +20,7 @@ export default baseConfig({
 
   optimization: {
     minimizer: [
-      new UglifyJSPlugin({
+      new TerserPlugin({
         parallel: true,
         sourceMap: true,
         cache: true,
@@ -30,8 +30,7 @@ export default baseConfig({
 
   plugins: [
     new BundleAnalyzerPlugin({
-      analyzerMode:
-        process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
+      analyzerMode: process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
       openAnalyzer: process.env.OPEN_ANALYZER === 'true',
     }),
 
