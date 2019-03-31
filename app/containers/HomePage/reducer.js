@@ -25,6 +25,7 @@ const cddReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         loading: false,
         error: false,
+        data: [],
       });
     default:
       return state;

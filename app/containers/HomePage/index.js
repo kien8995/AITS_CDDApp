@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { DatePicker, Button, Row, Col, List, Input, message } from 'antd';
+import { DatePicker, Button, Row, Col, Input, message } from 'antd';
 import styled from 'styled-components';
 import moment from 'moment';
 import { remote } from 'electron';
 import fse from 'fs-extra';
 import path from 'path';
 import fg from 'fast-glob';
+import ListFile from './ListFile';
 import { actionLoading, actionError, loadFile, importData } from './actions';
 import cddReducer, { initialState } from './reducer';
 import {
@@ -45,21 +46,6 @@ const { RangePicker } = DatePicker;
 
 const { Search } = Input;
 
-const ListHeader = styled.div`
-  font-weight: bold;
-  font-size: 14pt;
-`;
-
-const ListItem = styled(List.Item)`
-  cursor: pointer;
-  transition: color 0.3s ease;
-  -webkit-transition: color 0.3s ease;
-  &:hover {
-    background-color: #40a9ff;
-    color: #fff;
-  }
-`;
-
 const ControlHeader = styled.div`
   font-weight: bold;
   font-size: 14pt;
@@ -76,7 +62,6 @@ const ListWrapper = styled(Col)`
 `;
 
 const ControlWrapper = styled(Col)`
-  margin-left: 50px;
   && {
     width: 300px;
   }
@@ -259,7 +244,11 @@ const HomePage = () => {
   };
 
   const importCDDFiles = async () => {
-    if (data.length === 0) return;
+    if (data.length === 0) {
+      message.error('File not found !');
+      return;
+    }
+
     dispatch(actionLoading());
     try {
       let importResult = true;
@@ -284,7 +273,7 @@ const HomePage = () => {
         }
       }
       dispatch(importData());
-      message.success('Completed!');
+      message.success('Completed !');
     } catch (error) {
       dispatch(actionError(error));
       message.error(error);
@@ -304,24 +293,15 @@ const HomePage = () => {
 
   return (
     <div>
-      <Row>
-        <ListWrapper span={12}>
-          <List
-            size="large"
-            header={<ListHeader>List of CDD files</ListHeader>}
-            bordered
-            loading={loading}
-            dataSource={data}
-            renderItem={item => <ListItem>{item.file}</ListItem>}
-          />
-        </ListWrapper>
-        <ControlWrapper span={10}>
+      <Row type="flex" justify="space-around">
+        <ControlWrapper span={6}>
           <ControlHeader>Select folder</ControlHeader>
           <Search
             value={directory}
             enterButton="Browse"
             readOnly
             onSearch={handleBrowseClick}
+            disabled={loading}
           />
 
           <ControlHeader>Select date range</ControlHeader>
@@ -329,6 +309,7 @@ const HomePage = () => {
             defaultValue={defaultDateRange}
             format={dateFormat}
             onChange={handleDateRangeChange}
+            disabled={loading}
           />
           <Row>
             <ButtonWrapper span={24}>
@@ -343,6 +324,9 @@ const HomePage = () => {
             </ButtonWrapper>
           </Row>
         </ControlWrapper>
+        <ListWrapper span={12}>
+          <ListFile loading={loading} dataSource={data} />
+        </ListWrapper>
       </Row>
     </div>
   );
