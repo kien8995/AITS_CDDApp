@@ -3,19 +3,19 @@
 
 
 "@sentry/browser@4.6.2 || ~4.6.4":
-  version "4.6.5"
-  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-4.6.5.tgz#ecae280400117fef039db1b678e110a7d3e98a10"
-  integrity sha512-sIbEDTdZeRN+jzCEHGBOdidjSv+ZmJ9VPfek+bnP5FZNyUYfaZRrwWG0sJPPb8SlhSPUQXSI1t1saRhvd+Gs4A==
+  version "4.6.6"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-4.6.6.tgz#58ac3de9956c8a7033f3830c3ee9e011c2bd133a"
+  integrity sha512-+9VsQ+oQYU+PYlLJG2ex7JCMSVQbnUvWPI2uZOofWdI9sWIPUub3boWItMzRQNQ1T4S3FZd4FqAWNFd3azdnBw==
   dependencies:
-    "@sentry/core" "4.6.5"
+    "@sentry/core" "4.6.6"
     "@sentry/types" "4.5.3"
     "@sentry/utils" "4.6.5"
     tslib "^1.9.3"
 
-"@sentry/core@4.6.2 || ~4.6.4", "@sentry/core@4.6.5":
-  version "4.6.5"
-  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-4.6.5.tgz#70b4bcfc555f7eff80581a17baadac5500c2f75d"
-  integrity sha512-dT0FATtKAgd4dashwK+S2vYzCXIga3VJFJgkZVTK2aoy45E56ztxcbmNdI8O+3e67tGM5Il6CrD2fZg5yLty9A==
+"@sentry/core@4.6.2 || ~4.6.4", "@sentry/core@4.6.6":
+  version "4.6.6"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-4.6.6.tgz#dea96a88533a3bdbdcc86ae18e35272c57e0fd20"
+  integrity sha512-7z9HKLTNr3zVBR3tBRheTxkkkuK2IqISUc5Iyo3crN2OecOLtpptT96f5XjLndBEL2ab39eCBPpA5OFjbpzrIA==
   dependencies:
     "@sentry/hub" "4.6.5"
     "@sentry/minimal" "4.6.5"
@@ -57,11 +57,11 @@
     tslib "^1.9.3"
 
 "@sentry/node@4.6.2 || ~4.6.4":
-  version "4.6.5"
-  resolved "https://registry.yarnpkg.com/@sentry/node/-/node-4.6.5.tgz#48d8a63e0ef693b2560f5b031e1fc8ddf28dd515"
-  integrity sha512-Od57hWxJ2V+I0Hg7uIyVxMDxebCTM9fFVKv4n3FeLvA9XAIRtE6iC8/+5YsbKwUOW5eRNLIvRD90rCUsvNf52Q==
+  version "4.6.6"
+  resolved "https://registry.yarnpkg.com/@sentry/node/-/node-4.6.6.tgz#50531a1a857d836b7eaf94a5f90556bae3074435"
+  integrity sha512-+zZHE2uOwQTgypP6N9oBd0Io6BKXaJh6mdmZBauF0G46/8V28sBQ/dXBtJJNZ8tW7eVlLGpLSGuJb9Ai7c/rNw==
   dependencies:
-    "@sentry/core" "4.6.5"
+    "@sentry/core" "4.6.6"
     "@sentry/hub" "4.6.5"
     "@sentry/types" "4.5.3"
     "@sentry/utils" "4.6.5"
@@ -341,10 +341,10 @@ electron-is-dev@^1.0.1:
   resolved "https://registry.yarnpkg.com/electron-is-dev/-/electron-is-dev-1.0.1.tgz#6e0a184736fe7aea77d18210b0b0f6a02402c4bc"
   integrity sha512-iwM3EotA9HTXqMGpQRkR/kT8OZqBbdfHTnlwcxsjSLYqY8svvsq0MuujsWCn3/vtgRmDv/PC/gKUUpoZvi5C1w==
 
-electron-log@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-3.0.1.tgz#5c60913e8ae1a8645560eea8b3c47c60d101e797"
-  integrity sha512-bomFcrYvkEXj0H00T5GjBee50TBA/VwdoDFpPQ2jz3LDGi+4wKF3xrB+N1qXiZYoqDeaK5lNRAkNsHKmXeCPfg==
+electron-log@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-3.0.4.tgz#d2e296157999f540621300183662882bb6d14991"
+  integrity sha512-W99wnksbZlH+CZgauXCG0JPw03902QeyQPxfrfdfQ3gzei2QqXb3tYpn21I4t2L/aI3D2Lp9hiUj6iawVfq4WA==
 
 electron-settings@^3.2.0:
   version "3.2.0"
@@ -493,9 +493,9 @@ function-bind@^1.1.1:
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
 
 generic-pool@^3.6.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/generic-pool/-/generic-pool-3.6.1.tgz#a51a8439ee86f0bbcf100fc1db3f45c86289deb4"
-  integrity sha512-iMmD/pY4q0+V+f8o4twE9JPeqfNuX+gJAaIPB3B0W1lFkBOtTxBo6B0HxHPgGhzQA8jego7EWopcYq/UDJO2KA==
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/generic-pool/-/generic-pool-3.7.1.tgz#36fe5bb83e7e0e032e5d32cd05dc00f5ff119aa8"
+  integrity sha512-ug6DAZoNgWm6q5KhPFA+hzXfBLFQu5sTXxPpv44DmE0A2g+CiHoq9LTVdkXpZMkYVMoGw83F6W+WT0h0MFMK/w==
 
 getpass@^0.1.1:
   version "0.1.7"
@@ -718,10 +718,10 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
-mssql@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/mssql/-/mssql-5.0.3.tgz#c13c47743ac7a8c1319e1904e8d6263b01b480fb"
-  integrity sha512-glA7ojGBP8RYJa+XSoFNpquNYSQki4BQ9DMfXecy2cGa3nf2a3szamaualBANK1acXjXEXhheCX446vYN+LGYg==
+mssql@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/mssql/-/mssql-5.0.5.tgz#04909b5fcbd78834c67681beea036015b559e7fa"
+  integrity sha512-RKkBhoajBW+79Lq9tDxlUTeu/w0xtg+kDC70h9xkKO3Otx5lcmyhH5Je2W2VwE54raWgXbhtXszH6dq9uszXqQ==
   dependencies:
     debug "^3.2.6"
     generic-pool "^3.6.1"
@@ -854,9 +854,9 @@ sax@^1.2.4:
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
 semver@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-5.6.0.tgz#7e74256fbaa49c75aa7c7a205cc22799cac80004"
-  integrity sha512-RS9R6R35NYgQn++fkDWaOmqGoj4Ek9gGs+DPxNUZKuwE183xjJroKvyo1IzVFeXvUrvmALy6FWD5xrdJT25gMg==
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.0.tgz#790a7cf6fea5459bac96110b29b60412dc8ff96b"
+  integrity sha512-Ya52jSX2u7QKghxeoFGpLwCtGlt7j0oY9DYb5apt9nPlJ42ID+ulTXESnt/qAQcoSERyZ5sl3LDIOw0nAn/5DA==
 
 source-map-support@^0.5.9:
   version "0.5.11"

@@ -31,10 +31,10 @@
     "@sentry/electron": "^0.17.0",
     "auto-launch": "^5.0.5",
     "electron-is-dev": "^1.0.1",
-    "electron-log": "^3.0.1",
+    "electron-log": "^3.0.4",
     "electron-settings": "^3.2.0",
     "electron-updater": "^4.0.6",
     "electron-window-state": "^5.0.1",
-    "mssql": "^5.0.3"
+    "mssql": "^5.0.5"
   }
 }
