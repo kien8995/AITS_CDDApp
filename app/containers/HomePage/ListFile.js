@@ -14,7 +14,7 @@ const StyledList = styled(({ maxHeight, ...restProps }) => <List {...restProps} 
   & .ant-list-item:nth-child(even) {
     background: #eee;
   }
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: ${props => props.maxHeight}px;
 `;
 
