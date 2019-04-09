@@ -192,14 +192,27 @@ export default class MenuBuilder {
         ],
       },
       {
-        label: 'Help',
+        label: 'Options',
         submenu: [
           {
-            label: `Check for Update`,
+            label: 'Config',
             click() {
-              autoUpdater.appUpdater(true);
+              // shell.openExternal(
+              //   'https://github.com/atom/electron/tree/master/docs#readme',
+              // );
             },
           },
+        ],
+      },
+      {
+        label: 'Help',
+        submenu: [
+          // {
+          //   label: `Check for Update`,
+          //   click() {
+          //     autoUpdater.appUpdater(true);
+          //   },
+          // },
           {
             label: 'Documentation',
             click() {
