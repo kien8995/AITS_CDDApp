@@ -2,11 +2,14 @@ import React, { useState, useEffect, useReducer } from 'react';
 import { DatePicker, Button, Row, Col, Input, message } from 'antd';
 import styled from 'styled-components';
 import moment from 'moment';
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import fse from 'fs-extra';
 import path from 'path';
 import fg from 'fast-glob';
+import { useField } from '../../utils/hooks';
 import ListFile from './ListFile';
+import ModalDB from './ModalDB';
+import ModalAbout from './ModalAbout';
 import { actionLoading, actionError, loadFile, importData } from './actions';
 import cddReducer, { initialState } from './reducer';
 import {
@@ -101,6 +104,14 @@ const HomePage = () => {
   const { loading, data } = state;
   const [directory, setDirectory] = useState('');
   const [dateRange, setDateRange] = useState(defaultDateRange);
+  const [visible, setVisible] = useState(false);
+  const [visibleAbout, setVisibleAbout] = useState(false);
+  const { value: serverAddress, onChange: handleServerAddressChange } = useField(
+    '10.125.0.6',
+  );
+  const { value: databaseName, onChange: handleDatabaseNameChange } = useField(
+    'CDDNewData',
+  );
 
   useEffect(() => {
     if (directory !== '') {
@@ -151,92 +162,96 @@ const HomePage = () => {
     }
   };
 
-  const importCDDFile = async (_tbName, _filePath, _fileDate) => {
+  const importCDDFile = async (_tbName, _filePath, _fileDate, _dbConfig) => {
     let importResult = false;
     switch (_tbName) {
       case 'Res':
-        importResult = await importRes(_filePath, _fileDate);
+        importResult = await importRes(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResFlight':
-        importResult = await importResFlight(_filePath, _fileDate);
+        importResult = await importResFlight(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResFlightFT':
-        importResult = await importResFlightFT(_filePath, _fileDate);
+        importResult = await importResFlightFT(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResRemarks':
-        importResult = await importResRemark(_filePath, _fileDate);
+        importResult = await importResRemark(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'PreResSeat':
-        importResult = await importResPreReservedSeat(_filePath, _fileDate);
+        importResult = await importResPreReservedSeat(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResPaxDoc':
-        importResult = await importResPassengerDoc(_filePath, _fileDate);
+        importResult = await importResPassengerDoc(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResSuspDocAgmt':
-        importResult = await importResSuspenseDocArrangement(_filePath, _fileDate);
+        importResult = await importResSuspenseDocArrangement(
+          _filePath,
+          _fileDate,
+          _dbConfig,
+        );
         return importResult;
       case 'ResSuspTimeLmt':
-        importResult = await importResSuspenseTimeLimit(_filePath, _fileDate);
+        importResult = await importResSuspenseTimeLimit(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResEmergencyCtc':
-        importResult = await importResEmergencyContact(_filePath, _fileDate);
+        importResult = await importResEmergencyContact(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResPassenger':
-        importResult = await importResPassenger(_filePath, _fileDate);
+        importResult = await importResPassenger(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResSSR':
-        importResult = await importResSSR(_filePath, _fileDate);
+        importResult = await importResSSR(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResTravelArranger':
-        importResult = await importResTravelArranger(_filePath, _fileDate);
+        importResult = await importResTravelArranger(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResPassengerEmail':
-        importResult = await importResPassengerEmail(_filePath, _fileDate);
+        importResult = await importResPassengerEmail(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResPassengerPhone':
-        importResult = await importResPassengerPhone(_filePath, _fileDate);
+        importResult = await importResPassengerPhone(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResODFlight':
-        importResult = await importResODFlight(_filePath, _fileDate);
+        importResult = await importResODFlight(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResAddress':
-        importResult = await importResAddress(_filePath, _fileDate);
+        importResult = await importResAddress(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktDocument':
-        importResult = await importTktDocument(_filePath, _fileDate);
+        importResult = await importTktDocument(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktCoupon':
-        importResult = await importTktCoupon(_filePath, _fileDate);
+        importResult = await importTktCoupon(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktTax':
-        importResult = await importTktTax(_filePath, _fileDate);
+        importResult = await importTktTax(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktTaxDetail':
-        importResult = await importTktTaxDetail(_filePath, _fileDate);
+        importResult = await importTktTaxDetail(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktPayment':
-        importResult = await importTktPayment(_filePath, _fileDate);
+        importResult = await importTktPayment(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktRemark':
-        importResult = await importTktRemark(_filePath, _fileDate);
+        importResult = await importTktRemark(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktAddress':
-        importResult = await importTktAddress(_filePath, _fileDate);
+        importResult = await importTktAddress(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktDocumentHistory':
-        importResult = await importTktDocumentHistory(_filePath, _fileDate);
+        importResult = await importTktDocumentHistory(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktCouponHistory':
-        importResult = await importTktCouponHistory(_filePath, _fileDate);
+        importResult = await importTktCouponHistory(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktEndorsement':
-        importResult = await importTktEndorsement(_filePath, _fileDate);
+        importResult = await importTktEndorsement(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'ResDataIndex':
-        importResult = await importResDataIndex(_filePath, _fileDate);
+        importResult = await importResDataIndex(_filePath, _fileDate, _dbConfig);
         return importResult;
       case 'TktProRation':
-        importResult = await importTktProration(_filePath, _fileDate);
+        importResult = await importTktProration(_filePath, _fileDate, _dbConfig);
         return importResult;
       default:
         return importResult;
@@ -249,6 +264,16 @@ const HomePage = () => {
       return;
     }
 
+    const dbConfig = {
+      user: 'sa',
+      password: 'k6sa',
+      server: serverAddress,
+      database: databaseName,
+      options: {
+        useUTC: false,
+      },
+    };
+
     dispatch(actionLoading());
     try {
       let importResult = true;
@@ -258,6 +283,7 @@ const HomePage = () => {
           data[index].name,
           path.join(directory, data[index].file),
           data[index].fileDate,
+          dbConfig,
         );
 
         if (!importResult) {
@@ -291,8 +317,29 @@ const HomePage = () => {
     setDateRange(dates);
   };
 
+  ipcRenderer.on('menu-config-database', () => {
+    setVisible(true);
+  });
+
+  ipcRenderer.on('menu-help-about', () => {
+    setVisibleAbout(true);
+  });
+
+  const handleOk = () => {
+    setVisible(false);
+  };
+
   return (
     <div>
+      <ModalDB
+        visible={visible}
+        onOk={handleOk}
+        serverAddress={serverAddress}
+        onServerAddressChange={handleServerAddressChange}
+        databaseName={databaseName}
+        onDatabaseNameChange={handleDatabaseNameChange}
+      />
+      <ModalAbout visible={visibleAbout}/>
       <Row type="flex" justify="space-around">
         <ControlWrapper span={6}>
           <ControlHeader>Select folder</ControlHeader>

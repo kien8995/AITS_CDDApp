@@ -4,7 +4,7 @@ import { createInterface } from 'readline';
 import fs, { createReadStream } from 'fs';
 import sql from 'mssql';
 import moment from 'moment';
-import dbConfig from 'config/db.config';
+// import dbConfig from 'config/db.config';
 import tbRes from './entities/tbRes';
 import tbResFlight from './entities/tbResFlight';
 import tbResFlightFT from './entities/tbResFlightFT';
@@ -43,7 +43,7 @@ const getFilesizeInBytes = filePath => {
   return fileSizeInBytes;
 };
 
-export const importRes = async (filePath, fileDate) => {
+export const importRes = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -228,7 +228,7 @@ export const importRes = async (filePath, fileDate) => {
   }
 };
 
-export const importResFlight = async (filePath, fileDate) => {
+export const importResFlight = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -490,7 +490,7 @@ export const importResFlight = async (filePath, fileDate) => {
   }
 };
 
-export const importResFlightFT = async (filePath, fileDate) => {
+export const importResFlightFT = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -635,7 +635,7 @@ export const importResFlightFT = async (filePath, fileDate) => {
   }
 };
 
-export const importResRemark = async (filePath, fileDate) => {
+export const importResRemark = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -744,7 +744,7 @@ export const importResRemark = async (filePath, fileDate) => {
   }
 };
 
-export const importResPreReservedSeat = async (filePath, fileDate) => {
+export const importResPreReservedSeat = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -900,7 +900,7 @@ export const importResPreReservedSeat = async (filePath, fileDate) => {
   }
 };
 
-export const importResPassengerDoc = async (filePath, fileDate) => {
+export const importResPassengerDoc = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -1072,7 +1072,7 @@ export const importResPassengerDoc = async (filePath, fileDate) => {
   }
 };
 
-export const importResSuspenseDocArrangement = async (filePath, fileDate) => {
+export const importResSuspenseDocArrangement = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -1256,7 +1256,7 @@ export const importResSuspenseDocArrangement = async (filePath, fileDate) => {
   }
 };
 
-export const importResSuspenseTimeLimit = async (filePath, fileDate) => {
+export const importResSuspenseTimeLimit = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -1379,7 +1379,7 @@ export const importResSuspenseTimeLimit = async (filePath, fileDate) => {
   }
 };
 
-export const importResEmergencyContact = async (filePath, fileDate) => {
+export const importResEmergencyContact = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -1512,7 +1512,7 @@ export const importResEmergencyContact = async (filePath, fileDate) => {
   }
 };
 
-export const importResPassenger = async (filePath, fileDate) => {
+export const importResPassenger = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -1627,7 +1627,7 @@ export const importResPassenger = async (filePath, fileDate) => {
   }
 };
 
-export const importResSSR = async (filePath, fileDate) => {
+export const importResSSR = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -1770,7 +1770,7 @@ export const importResSSR = async (filePath, fileDate) => {
   }
 };
 
-export const importResTravelArranger = async (filePath, fileDate) => {
+export const importResTravelArranger = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -1903,7 +1903,7 @@ export const importResTravelArranger = async (filePath, fileDate) => {
   }
 };
 
-export const importResPassengerEmail = async (filePath, fileDate) => {
+export const importResPassengerEmail = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -2012,7 +2012,7 @@ export const importResPassengerEmail = async (filePath, fileDate) => {
   }
 };
 
-export const importResPassengerPhone = async (filePath, fileDate) => {
+export const importResPassengerPhone = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -2124,7 +2124,7 @@ export const importResPassengerPhone = async (filePath, fileDate) => {
   }
 };
 
-export const importResODFlight = async (filePath, fileDate) => {
+export const importResODFlight = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -2231,7 +2231,7 @@ export const importResODFlight = async (filePath, fileDate) => {
   }
 };
 
-export const importResAddress = async (filePath, fileDate) => {
+export const importResAddress = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -2370,7 +2370,7 @@ export const importResAddress = async (filePath, fileDate) => {
   }
 };
 
-export const importTktDocument = async (filePath, fileDate) => {
+export const importTktDocument = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -2709,7 +2709,7 @@ export const importTktDocument = async (filePath, fileDate) => {
   }
 };
 
-export const importTktCoupon = async (filePath, fileDate) => {
+export const importTktCoupon = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -2936,7 +2936,7 @@ export const importTktCoupon = async (filePath, fileDate) => {
   }
 };
 
-export const importTktTax = async (filePath, fileDate) => {
+export const importTktTax = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -3041,7 +3041,7 @@ export const importTktTax = async (filePath, fileDate) => {
   }
 };
 
-export const importTktTaxDetail = async (filePath, fileDate) => {
+export const importTktTaxDetail = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -3143,7 +3143,7 @@ export const importTktTaxDetail = async (filePath, fileDate) => {
   }
 };
 
-export const importTktPayment = async (filePath, fileDate) => {
+export const importTktPayment = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -3257,7 +3257,7 @@ export const importTktPayment = async (filePath, fileDate) => {
   }
 };
 
-export const importTktRemark = async (filePath, fileDate) => {
+export const importTktRemark = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -3350,7 +3350,7 @@ export const importTktRemark = async (filePath, fileDate) => {
   }
 };
 
-export const importTktAddress = async (filePath, fileDate) => {
+export const importTktAddress = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -3443,7 +3443,7 @@ export const importTktAddress = async (filePath, fileDate) => {
   }
 };
 
-export const importTktDocumentHistory = async (filePath, fileDate) => {
+export const importTktDocumentHistory = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -3610,7 +3610,7 @@ export const importTktDocumentHistory = async (filePath, fileDate) => {
   }
 };
 
-export const importTktCouponHistory = async (filePath, fileDate) => {
+export const importTktCouponHistory = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -3780,7 +3780,7 @@ export const importTktCouponHistory = async (filePath, fileDate) => {
   }
 };
 
-export const importTktEndorsement = async (filePath, fileDate) => {
+export const importTktEndorsement = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -3873,7 +3873,7 @@ export const importTktEndorsement = async (filePath, fileDate) => {
   }
 };
 
-export const importResDataIndex = async (filePath, fileDate) => {
+export const importResDataIndex = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }
@@ -3988,7 +3988,7 @@ export const importResDataIndex = async (filePath, fileDate) => {
   }
 };
 
-export const importTktProration = async (filePath, fileDate) => {
+export const importTktProration = async (filePath, fileDate, dbConfig) => {
   if (getFilesizeInBytes(filePath) === 0) {
     return true;
   }

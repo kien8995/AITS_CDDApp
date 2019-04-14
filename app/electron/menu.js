@@ -168,13 +168,37 @@ export default class MenuBuilder {
             // shell.openExternal('https://github.com/atom/electron/issues');
           },
         },
+        {
+          label: 'About',
+          click: () => {
+            this.mainWindow.webContents.send('menu-help-about');
+          },
+        },
+      ],
+    };
+    const subConfiguration = {
+      label: 'Configurations',
+      submenu: [
+        {
+          label: 'Database connection',
+          click: () => {
+            this.mainWindow.webContents.send('menu-config-database');
+          },
+        },
       ],
     };
 
     const subMenuView =
       process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd;
 
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+    return [
+      subMenuAbout,
+      subMenuEdit,
+      subMenuView,
+      subMenuWindow,
+      subMenuHelp,
+      subConfiguration,
+    ];
   }
 
   buildDefaultTemplate() {
@@ -192,14 +216,12 @@ export default class MenuBuilder {
         ],
       },
       {
-        label: 'Options',
+        label: 'Configurations',
         submenu: [
           {
-            label: 'Config',
-            click() {
-              // shell.openExternal(
-              //   'https://github.com/atom/electron/tree/master/docs#readme',
-              // );
+            label: 'Database connection',
+            click: () => {
+              this.mainWindow.webContents.send('menu-config-database');
             },
           },
         ],
@@ -214,11 +236,9 @@ export default class MenuBuilder {
           //   },
           // },
           {
-            label: 'Documentation',
-            click() {
-              // shell.openExternal(
-              //   'https://github.com/atom/electron/tree/master/docs#readme',
-              // );
+            label: 'About',
+            click: () => {
+              this.mainWindow.webContents.send('menu-help-about');
             },
           },
         ],

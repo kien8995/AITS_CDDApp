@@ -9,9 +9,7 @@ import useCheckbox from './useCheckbox';
 import useSelect from './useSelect';
 import useInterval from './useInterval';
 import useList from './useList';
-import useLocalStorage from './useLocalStorage';
 import useMap from './useMap';
-import useSessionStorage from './useSessionStorage';
 import useTimeout from './useTimeout';
 import useTitle from './useTitle';
 import useToggle from './useToggle';
@@ -30,9 +28,7 @@ export {
   useSelect,
   useInterval,
   useList,
-  useLocalStorage,
   useMap,
-  useSessionStorage,
   useTimeout,
   useTitle,
   useToggle,
