@@ -23,7 +23,7 @@ const AppWrapper = styled.div`
 const App = () => (
   <AppWrapper>
     <Helmet
-      titleTemplate="%s CDD App v1.0 - Powered by AITS"
+      titleTemplate="%s CDD App v1.1 - Powered by AITS"
       defaultTitle="CDD App v1.0 - Powered by AITS"
     >
       <meta name="description" content="CDD App" />

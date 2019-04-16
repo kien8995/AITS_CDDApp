@@ -329,6 +329,10 @@ const HomePage = () => {
     setVisible(false);
   };
 
+  const handleModalAboutCancel = () => {
+    setVisibleAbout(false);
+  };
+
   return (
     <div>
       <ModalDB
@@ -339,7 +343,7 @@ const HomePage = () => {
         databaseName={databaseName}
         onDatabaseNameChange={handleDatabaseNameChange}
       />
-      <ModalAbout visible={visibleAbout}/>
+      <ModalAbout visible={visibleAbout} onCancel={handleModalAboutCancel} />
       <Row type="flex" justify="space-around">
         <ControlWrapper span={6}>
           <ControlHeader>Select folder</ControlHeader>

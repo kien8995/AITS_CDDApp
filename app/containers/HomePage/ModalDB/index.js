@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import sql from 'mssql';
 import { Modal, Form, Input, Button } from 'antd';
+import Message from './Message';
+
+const StyledModal = styled(Modal)`
+  & .ant-modal-body {
+    padding-bottom: 0px;
+  }
+`;
 
 const ModalDB = ({
   visible,
@@ -12,7 +20,7 @@ const ModalDB = ({
   onDatabaseNameChange,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({ type: '', message: '' });
 
   const testConnection = async () => {
     setLoading(true);
@@ -32,10 +40,12 @@ const ModalDB = ({
       await sql.query`SELECT 1`;
 
       setLoading(false);
-      setMessage('Successed!');
+      setMessage({ type: 'success', message: 'Successed!' });
     } catch (error) {
       setLoading(false);
-      setMessage(error);
+      setMessage({ type: 'error', message: error.message });
+    } finally {
+      sql.close();
     }
   };
 
@@ -48,7 +58,7 @@ const ModalDB = ({
   };
 
   return (
-    <Modal
+    <StyledModal
       title="Database Connection"
       closable={false}
       visible={visible}
@@ -74,12 +84,13 @@ const ModalDB = ({
           />
         </Form.Item>
         <Form.Item {...buttonItemLayout}>
-          <Button type="primary" loading={loading}>
+          <Button loading={loading} onClick={testConnection}>
             Test connection
           </Button>
+          <Message type={message.type} message={message.message} />
         </Form.Item>
       </Form>
-    </Modal>
+    </StyledModal>
   );
 };
 

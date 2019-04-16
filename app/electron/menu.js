@@ -238,7 +238,7 @@ export default class MenuBuilder {
           {
             label: 'About',
             click: () => {
-              // this.mainWindow.webContents.send('menu-help-about');
+              this.mainWindow.webContents.send('menu-help-about');
             },
           },
         ],
