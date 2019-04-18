@@ -102,16 +102,14 @@ const moveFile = async (src, dest) => {
 const HomePage = () => {
   const [state, dispatch] = useReducer(cddReducer, initialState);
   const { loading, data } = state;
-  const [directory, setDirectory] = useState('');
+  const [directory, setDirectory] = useState('E:\\Delivery Data');
   const [dateRange, setDateRange] = useState(defaultDateRange);
   const [visible, setVisible] = useState(false);
   const [visibleAbout, setVisibleAbout] = useState(false);
   const { value: serverAddress, onChange: handleServerAddressChange } = useField(
     '10.125.0.6',
   );
-  const { value: databaseName, onChange: handleDatabaseNameChange } = useField(
-    'CDDNewData',
-  );
+  const { value: databaseName, onChange: handleDatabaseNameChange } = useField('CDDData');
 
   useEffect(() => {
     if (directory !== '') {
