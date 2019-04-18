@@ -86,7 +86,10 @@ const currentTime = new Date();
 const today = `${currentTime.getFullYear()}/${currentTime.getMonth() +
   1}/${currentTime.getDate()}`;
 
-const defaultDateRange = [moment(today, dateFormat).subtract(1, 'd'), moment(today, dateFormat).subtract(1, 'd')];
+const defaultDateRange = [
+  moment(today, dateFormat).subtract(1, 'd'),
+  moment(today, dateFormat).subtract(1, 'd'),
+];
 
 const filePattern = /^(.*)+_(\d{8}).(txt)$/;
 
@@ -297,7 +300,7 @@ const HomePage = () => {
             key: 'updatable',
             duration: 0,
             message: 'Notification',
-            description: `Processing ${index+1}/${data.length} files`,
+            description: `Processing ${index + 1}/${data.length} files`,
           });
         } else {
           notification.close('updatable');

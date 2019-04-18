@@ -32,7 +32,36 @@ import tbTktEndorsement from './entities/tbTktEndorsement';
 import tbResDataIndex from './entities/tbResDataIndex';
 import tbTktProration from './entities/tbTktProration';
 
-import { taskRes, taskResFlight, taskResFlightFT, taskResRemark, taskResPreReservedSeat, taskResPassengerDoc, taskResSuspenseDocArrangement, taskResSuspenseTimeLimit, taskResEmergencyContact, taskResPassenger, taskResSSR, taskResTravelArranger, taskResPassengerEmail, taskResPassengerPhone, taskResODFlight, taskResAddress, taskTktDocument, taskTktCoupon, taskTktTax, taskTktTaxDetail, taskTktPayment, taskTktRemark, taskTktAddress, taskTktDocumentHistory, taskTktCouponHistory, taskTktEndorsement, taskResDataIndex, taskTktProration } from './insertTask';
+import {
+  taskRes,
+  taskResFlight,
+  taskResFlightFT,
+  taskResRemark,
+  taskResPreReservedSeat,
+  taskResPassengerDoc,
+  taskResSuspenseDocArrangement,
+  taskResSuspenseTimeLimit,
+  taskResEmergencyContact,
+  taskResPassenger,
+  taskResSSR,
+  taskResTravelArranger,
+  taskResPassengerEmail,
+  taskResPassengerPhone,
+  taskResODFlight,
+  taskResAddress,
+  taskTktDocument,
+  taskTktCoupon,
+  taskTktTax,
+  taskTktTaxDetail,
+  taskTktPayment,
+  taskTktRemark,
+  taskTktAddress,
+  taskTktDocumentHistory,
+  taskTktCouponHistory,
+  taskTktEndorsement,
+  taskResDataIndex,
+  taskTktProration,
+} from './insertTask';
 
 const formatDate = 'YYYY-MM-DD';
 const formatDateTime = 'YYYY-MM-DD HH:mm:ss';

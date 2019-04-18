@@ -1,5 +1,5 @@
 import { app, Menu, shell } from 'electron';
-import autoUpdater from './autoupdater';
+// import autoUpdater from './autoupdater';
 
 export default class MenuBuilder {
   mainWindow;
