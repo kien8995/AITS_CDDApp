@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { DatePicker, Button, Row, Col, Input, message } from 'antd';
+import { DatePicker, Button, Row, Col, Input, message, notification } from 'antd';
 import styled from 'styled-components';
 import moment from 'moment';
 import { remote, ipcRenderer } from 'electron';
@@ -86,13 +86,13 @@ const currentTime = new Date();
 const today = `${currentTime.getFullYear()}/${currentTime.getMonth() +
   1}/${currentTime.getDate()}`;
 
-const defaultDateRange = [moment(today, dateFormat), moment(today, dateFormat)];
+const defaultDateRange = [moment(today, dateFormat).subtract(1, 'd'), moment(today, dateFormat).subtract(1, 'd')];
 
 const filePattern = /^(.*)+_(\d{8}).(txt)$/;
 
 const moveFile = async (src, dest) => {
   try {
-    await fse.move(src, dest);
+    await fse.move(src, dest, { overwrite: true });
     // console.log('success!');
   } catch (err) {
     // console.error(err);
@@ -110,6 +110,21 @@ const HomePage = () => {
     '10.125.0.6',
   );
   const { value: databaseName, onChange: handleDatabaseNameChange } = useField('CDDData');
+
+  useEffect(() => {
+    ipcRenderer.on('menu-config-database', () => {
+      setVisible(true);
+    });
+
+    ipcRenderer.on('menu-help-about', () => {
+      setVisibleAbout(true);
+    });
+
+    return () =>
+      ipcRenderer.eventNames().forEach(n => {
+        ipcRenderer.removeAllListeners(n);
+      });
+  }, []);
 
   useEffect(() => {
     if (directory !== '') {
@@ -272,10 +287,22 @@ const HomePage = () => {
       },
     };
 
-    dispatch(actionLoading());
     try {
+      dispatch(actionLoading());
+
       let importResult = true;
       for (let index = 0; index < data.length; index += 1) {
+        if (index < data.length - 1) {
+          notification.open({
+            key: 'updatable',
+            duration: 0,
+            message: 'Notification',
+            description: `Processing ${index+1}/${data.length} files`,
+          });
+        } else {
+          notification.close('updatable');
+        }
+
         // eslint-disable-next-line no-await-in-loop
         importResult = await importCDDFile(
           data[index].name,
@@ -296,8 +323,9 @@ const HomePage = () => {
           );
         }
       }
-      dispatch(importData());
+
       message.success('Completed !');
+      dispatch(importData());
     } catch (error) {
       dispatch(actionError(error));
       message.error(error);
@@ -314,14 +342,6 @@ const HomePage = () => {
   const handleDateRangeChange = dates => {
     setDateRange(dates);
   };
-
-  ipcRenderer.on('menu-config-database', () => {
-    setVisible(true);
-  });
-
-  ipcRenderer.on('menu-help-about', () => {
-    setVisibleAbout(true);
-  });
 
   const handleOk = () => {
     setVisible(false);
