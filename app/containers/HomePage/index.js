@@ -7,6 +7,7 @@ import fse from 'fs-extra';
 import path from 'path';
 import fg from 'fast-glob';
 import { useField } from '../../utils/hooks';
+import { userData } from './userData';
 import ListFile from './ListFile';
 import ModalDB from './ModalDB';
 import ModalAbout from './ModalAbout';
@@ -103,16 +104,24 @@ const moveFile = async (src, dest) => {
 };
 
 const HomePage = () => {
+  const databaseConfig = userData.get('database');
+
   const [state, dispatch] = useReducer(cddReducer, initialState);
   const { loading, data } = state;
-  const [directory, setDirectory] = useState('E:\\Delivery Data');
+  const [directory, setDirectory] = useState(userData.get('cddData').directory);
   const [dateRange, setDateRange] = useState(defaultDateRange);
   const [visible, setVisible] = useState(false);
   const [visibleAbout, setVisibleAbout] = useState(false);
-  const { value: serverAddress, onChange: handleServerAddressChange } = useField(
-    '10.125.0.6',
+  const { value: user, onChange: handleUserChange } = useField(databaseConfig.user);
+  const { value: password, onChange: handlePasswordChange } = useField(
+    databaseConfig.password,
   );
-  const { value: databaseName, onChange: handleDatabaseNameChange } = useField('CDDData');
+  const { value: serverAddress, onChange: handleServerAddressChange } = useField(
+    databaseConfig.server,
+  );
+  const { value: databaseName, onChange: handleDatabaseNameChange } = useField(
+    databaseConfig.database,
+  );
 
   useEffect(() => {
     ipcRenderer.on('menu-config-database', () => {
@@ -134,6 +143,10 @@ const HomePage = () => {
       getCDDFiles();
     }
   }, [directory, dateRange]);
+
+  useEffect(() => {
+    userData.set('cddData', { directory });
+  }, [directory]);
 
   const getCDDFiles = async () => {
     dispatch(actionLoading());
@@ -281,8 +294,8 @@ const HomePage = () => {
     }
 
     const dbConfig = {
-      user: 'sa',
-      password: 'k6sa',
+      user,
+      password,
       server: serverAddress,
       database: databaseName,
       options: {
@@ -359,6 +372,10 @@ const HomePage = () => {
       <ModalDB
         visible={visible}
         onOk={handleOk}
+        user={user}
+        onUserChange={handleUserChange}
+        password={password}
+        onPasswordChange={handlePasswordChange}
         serverAddress={serverAddress}
         onServerAddressChange={handleServerAddressChange}
         databaseName={databaseName}

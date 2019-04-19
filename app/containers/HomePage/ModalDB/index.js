@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import sql from 'mssql';
 import { Modal, Form, Input, Button } from 'antd';
+import { userData } from '../userData';
 import Message from './Message';
 
 const StyledModal = styled(Modal)`
@@ -11,9 +12,19 @@ const StyledModal = styled(Modal)`
   }
 `;
 
+const FormItem = styled(Form.Item)`
+  && {
+    margin-bottom: 5px;
+  }
+`;
+
 const ModalDB = ({
   visible,
   onOk,
+  user,
+  onUserChange,
+  password,
+  onPasswordChange,
   serverAddress,
   onServerAddressChange,
   databaseName,
@@ -22,13 +33,22 @@ const ModalDB = ({
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', message: '' });
 
+  useEffect(() => {
+    userData.set('database', {
+      user,
+      password,
+      server: serverAddress,
+      database: databaseName,
+    });
+  }, [user, password, serverAddress, databaseName]);
+
   const testConnection = async () => {
     setLoading(true);
 
     try {
       const dbConfig = {
-        user: 'sa',
-        password: 'k6sa',
+        user,
+        password,
         server: serverAddress,
         database: databaseName,
         options: {
@@ -69,26 +89,37 @@ const ModalDB = ({
       ]}
     >
       <Form layout="horizontal">
-        <Form.Item label="Server" {...formItemLayout}>
+        <FormItem label="User" {...formItemLayout}>
+          <Input placeholder="user" value={user} onChange={onUserChange} />
+        </FormItem>
+        <FormItem label="Password" {...formItemLayout}>
+          <Input
+            placeholder="password"
+            type="password"
+            value={password}
+            onChange={onPasswordChange}
+          />
+        </FormItem>
+        <FormItem label="Server" {...formItemLayout}>
           <Input
             placeholder="10.1.2.3"
             value={serverAddress}
             onChange={onServerAddressChange}
           />
-        </Form.Item>
-        <Form.Item label="Database" {...formItemLayout}>
+        </FormItem>
+        <FormItem label="Database" {...formItemLayout}>
           <Input
             placeholder="Database name"
             value={databaseName}
             onChange={onDatabaseNameChange}
           />
-        </Form.Item>
-        <Form.Item {...buttonItemLayout}>
+        </FormItem>
+        <FormItem {...buttonItemLayout}>
           <Button loading={loading} onClick={testConnection}>
             Test connection
           </Button>
           <Message type={message.type} message={message.message} />
-        </Form.Item>
+        </FormItem>
       </Form>
     </StyledModal>
   );
@@ -97,6 +128,10 @@ const ModalDB = ({
 ModalDB.propTypes = {
   visible: PropTypes.bool,
   onOk: PropTypes.func,
+  user: PropTypes.string,
+  onUserChange: PropTypes.func,
+  password: PropTypes.string,
+  onPasswordChange: PropTypes.func,
   serverAddress: PropTypes.string,
   onServerAddressChange: PropTypes.func,
   databaseName: PropTypes.string,
