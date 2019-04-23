@@ -213,7 +213,7 @@
     ]
   },
   "dependencies": {
-    "antd": "3.16.2",
+    "antd": "^3.16.5",
     "axios": "^0.18.0",
     "babel-polyfill": "6.26.0",
     "chalk": "2.4.2",
@@ -291,8 +291,8 @@
     "eventsource-polyfill": "0.9.6",
     "exports-loader": "0.7.0",
     "file-loader": "3.0.1",
-    "gulp": "^4.0.0",
-    "gulp-clean-css": "^4.0.0",
+    "gulp": "^4.0.1",
+    "gulp-clean-css": "^4.2.0",
     "gulp-htmlmin": "^5.0.1",
     "gulp-replace": "^1.0.0",
     "gulp-ssh": "^0.7.0",
@@ -308,7 +308,7 @@
     "lint-staged": "8.1.5",
     "ngrok": "3.1.1",
     "node-plop": "0.18.0",
-    "null-loader": "0.1.1",
+    "null-loader": "^1.0.0",
     "offline-plugin": "5.0.6",
     "plop": "2.3.0",
     "postcss-import": "^12.0.1",
@@ -331,7 +331,7 @@
     "url-loader": "1.1.2",
     "webpack": "^4.30.0",
     "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-cli": "3.3.0",
+    "webpack-cli": "^3.3.1",
     "webpack-dev-server": "^3.3.1",
     "webpack-pwa-manifest": "4.0.0"
   }
