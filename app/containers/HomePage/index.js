@@ -44,6 +44,14 @@ import {
   importTktProration,
 } from './importCDD';
 
+import {
+  getPaxDocByImportDate,
+  getCustomerInsign,
+  getCustomerInsignOAL,
+  getTicketOd,
+  getODFlight,
+} from './dataModel';
+
 const { dialog } = remote;
 
 const { RangePicker } = DatePicker;
@@ -78,6 +86,20 @@ const ButtonWrapper = styled(Col)`
 
 const ImportButton = styled(Button)`
   /* text-align: center; */
+`;
+
+const ExtraButton = styled(Button)`
+  &&,
+  &&:focus,
+  &&:hover {
+    background-color: #db1818;
+    border-color: #db1818;
+  }
+
+  &&:hover {
+    background-color: #f44242;
+    border-color: #f44242;
+  }
 `;
 
 const dateFormat = 'YYYY/MM/DD';
@@ -122,6 +144,16 @@ const HomePage = () => {
   const { value: databaseName, onChange: handleDatabaseNameChange } = useField(
     databaseConfig.database,
   );
+
+  const dbConfig = {
+    user,
+    password,
+    server: serverAddress,
+    database: databaseName,
+    options: {
+      useUTC: false,
+    },
+  };
 
   useEffect(() => {
     ipcRenderer.on('menu-config-database', () => {
@@ -293,16 +325,6 @@ const HomePage = () => {
       return;
     }
 
-    const dbConfig = {
-      user,
-      password,
-      server: serverAddress,
-      database: databaseName,
-      options: {
-        useUTC: false,
-      },
-    };
-
     try {
       dispatch(actionLoading());
 
@@ -345,6 +367,19 @@ const HomePage = () => {
     } catch (error) {
       dispatch(actionError(error));
       message.error(error);
+    }
+  };
+
+  const makeCustomerInsign = async () => {
+    try {
+      const result = await getODFlight(
+        dbConfig,
+        new Date(dateRange[0].format('YYYY-MM-DD')),
+      );
+
+      console.log(result.length);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -410,6 +445,21 @@ const HomePage = () => {
               >
                 Import Data
               </ImportButton>
+            </ButtonWrapper>
+            <ButtonWrapper span={24}>
+              <ExtraButton type="primary" onClick={makeCustomerInsign} loading={loading}>
+                1. Make Customer Insign
+              </ExtraButton>
+            </ButtonWrapper>
+            <ButtonWrapper span={24}>
+              <ExtraButton type="primary" loading={loading}>
+                2. Make TicketOD
+              </ExtraButton>
+            </ButtonWrapper>
+            <ButtonWrapper span={24}>
+              <ExtraButton type="primary" loading={loading}>
+                3. Make ResOD
+              </ExtraButton>
             </ButtonWrapper>
           </Row>
         </ControlWrapper>
